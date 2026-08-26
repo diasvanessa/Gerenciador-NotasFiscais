@@ -269,5 +269,4 @@ Projeto-ERP/
 
 ---
 
-Desenvolvido com dedicação por **Vanessa**.
 
