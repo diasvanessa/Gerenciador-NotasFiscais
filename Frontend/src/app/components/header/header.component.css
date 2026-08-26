@@ -1,0 +1,333 @@
+.app-header {
+  background: var(--bg-surface);
+  height: 72px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  width: 100%;
+}
+
+.header-container {
+  max-width: 1560px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ==========================================================================
+   LEFT: LOGO
+   ========================================================================== */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.brand-logo:hover {
+  transform: translateY(-1px);
+}
+
+.logo-mark {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.brand-text {
+  font-family: var(--font-primary);
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--brand-petroleum-800);
+  line-height: 1;
+}
+
+.erp-badge {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--brand-petroleum-800);
+}
+
+.tagline-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--accent-magenta);
+  color: #FFFFFF;
+  padding: 1px 8px 2px 6px;
+  border-radius: 2px;
+  transform: skewX(-12deg);
+  width: fit-content;
+  margin-top: 1px;
+}
+
+.tagline-text {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   CENTER: NAVIGATION PILLS
+   ========================================================================== */
+.header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-surface-secondary);
+  padding: 4px 6px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+}
+
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-pill .pill-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.75;
+  transition: transform 0.2s ease, stroke 0.2s ease;
+}
+
+.nav-pill:hover {
+  color: var(--brand-petroleum-800);
+  background: rgba(22, 48, 59, 0.06);
+}
+
+.nav-pill:hover .pill-icon {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.nav-pill.active {
+  background: var(--brand-petroleum-800);
+  color: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(22, 48, 59, 0.2);
+}
+
+.nav-pill.active .pill-icon {
+  opacity: 1;
+  stroke: #FFFFFF;
+}
+
+/* ==========================================================================
+   RIGHT: ACTIONS & PROFILE
+   ========================================================================== */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Novo Produto Button */
+.btn-novo-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-magenta);
+  color: #FFFFFF;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-magenta);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-novo-header svg {
+  width: 15px;
+  height: 15px;
+}
+
+.btn-novo-header:hover {
+  background: var(--accent-magenta-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 0, 85, 0.35);
+}
+
+/* Icon Buttons (Notifications) */
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-btn:hover {
+  background: #FFFFFF;
+  color: var(--brand-petroleum-800);
+  border-color: var(--border-focus);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-magenta);
+  border-radius: var(--radius-full);
+  border: 2px solid #FFFFFF;
+}
+
+/* User Profile Chip */
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 14px 4px 4px;
+  background: var(--bg-surface-secondary);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.user-chip:hover {
+  background: #FFFFFF;
+  border-color: var(--border-focus);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--brand-petroleum-700), var(--brand-petroleum-900));
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(14, 31, 38, 0.15);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-greeting {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.user-name {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .header-container {
+    padding: 0 1.25rem;
+    gap: 1rem;
+  }
+
+  .nav-pill {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-header {
+    height: auto;
+    padding: 0.75rem 0;
+  }
+
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .header-left {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .header-center {
+    width: 100%;
+  }
+
+  .nav-pills {
+    width: 100%;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-novo-header span {
+    display: none;
+  }
+
+  .btn-novo-header {
+    padding: 8px;
+  }
+
+  .user-greeting {
+    display: none;
+  }
+}

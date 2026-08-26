@@ -1,0 +1,36 @@
+## .NET / C#
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+
+## Secrets & Local Environment Variables
+.env
+.env.*
+!.env.example
+*.local.json
+appsettings.Development.json
+
+## SQLite & Databases
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+*.db-shm
+*.db-wal
+
+## Node / Angular
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.angular/
+.npm
+npm-debug.log*
+
+## OS / Logs
+.DS_Store
+Thumbs.db
+*.log
+

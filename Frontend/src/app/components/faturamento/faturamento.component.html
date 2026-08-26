@@ -1,0 +1,152 @@
+<div class="invoices-view fade-in">
+  <div class="view-header">
+    <div class="view-title-group">
+      <h2 class="view-title">Faturamento & Notas Fiscais</h2>
+      <p class="view-subtitle">Emissão, consulta e impressão de notas fiscais com integração resiliente ao estoque.</p>
+    </div>
+    <div class="header-actions-row">
+      <button class="btn-secondary-action" (click)="carregarDados()" [disabled]="isLoading()" title="Recarregar Dados">
+        <svg [class.spin]="isLoading()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        <span>Atualizar</span>
+      </button>
+      <button class="btn-primary-action" (click)="abrirModalNota()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Emitir Nova Nota
+      </button>
+    </div>
+  </div>
+
+  <!-- Resilience Warning Banner: Faturamento Offline -->
+  @if (erroConexaoFaturamento()) {
+  <div class="resilience-alert-banner alert-danger">
+    <div class="alert-icon-col">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+    </div>
+    <div class="alert-content-col">
+      <h4>Microsserviço de Faturamento Inacessível (Porta 5168)</h4>
+      <p>Não foi possível comunicar com o backend de Faturamento. Verifique se o serviço está em execução.</p>
+    </div>
+    <button class="btn-alert-action" (click)="carregarDados()">
+      Tentar Reconectar
+    </button>
+  </div>
+  }
+
+  <!-- Resilience Warning Banner: Estoque Offline Notice -->
+  @if (!healthService.estoqueHealth().online && !erroConexaoFaturamento()) {
+  <div class="resilience-alert-banner alert-warning">
+    <div class="alert-icon-col">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+        <line x1="12" y1="9" x2="12" y2="13" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+    </div>
+    <div class="alert-content-col">
+      <h4>Atenção: Microsserviço de Estoque Offline (Porta 5032)</h4>
+      <p>O Faturamento continua operando normalmente para emissão, porém a impressão de notas ficará protegida pelas políticas de resiliência e compensação até que o Estoque esteja online.</p>
+    </div>
+    <button class="btn-alert-action" (click)="healthService.verificarTodos()">
+      Verificar Estoque
+    </button>
+  </div>
+  }
+
+  <div class="invoices-list-card">
+    <table class="invoices-table">
+      <thead>
+        <tr>
+          <th>Número da Nota</th>
+          <th>Status</th>
+          <th>Itens da Nota</th>
+          <th>Total Itens</th>
+          <th class="text-right">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (nota of notasFiscais(); track nota.numero) {
+        <tr>
+          <td>
+            <div class="invoice-number-cell">
+              <span class="invoice-icon-box">NF</span>
+              <strong>Nº {{ nota.numero }}</strong>
+            </div>
+          </td>
+          <td>
+            @if (nota.status === 1) {
+            <span class="status-chip status-closed">Fechada</span>
+            } @else {
+            <span class="status-chip status-open">Aberta</span>
+            }
+          </td>
+          <td>
+            <div class="items-chip-list">
+              @for (item of nota.itens; track item.codigoProduto) {
+              <span class="item-tag">
+                {{ item.codigoProduto }} ({{ item.quantidade }}x)
+              </span>
+              }
+            </div>
+          </td>
+          <td>
+            {{ nota.itens.length }} item(ns)
+          </td>
+          <td class="text-right">
+            @if (nota.status === 0) {
+            <button
+              class="btn-print-action"
+              [disabled]="imprimindoNumero() === nota.numero"
+              (click)="imprimirNotaFiscal(nota.numero)"
+            >
+              @if (imprimindoNumero() === nota.numero) {
+                <span class="spinner-small"></span>
+                <span>Processando...</span>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9" />
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                  <rect x="6" y="14" width="12" height="8" />
+                </svg>
+                <span>Imprimir</span>
+              }
+            </button>
+            } @else {
+            <span class="printed-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Concluída
+            </span>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="5" class="text-center py-5">
+            @if (isLoading()) {
+              <span class="loading-state">Carregando notas fiscais...</span>
+            } @else if (erroConexaoFaturamento()) {
+              <span class="error-state">Falha ao carregar notas fiscais. Clique em "Tentar Reconectar" acima.</span>
+            } @else {
+              Nenhuma nota fiscal emitida até o momento.
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- EMBEDDED MODAL NOTA -->
+<app-modal-nota [isOpen]="isModalNotaOpen()" [produtos]="produtosDisponiveis()" (close)="fecharModalNota()"
+  (save)="salvarNotaFiscal($event)"></app-modal-nota>

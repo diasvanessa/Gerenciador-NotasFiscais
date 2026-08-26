@@ -1,0 +1,454 @@
+<div class="dashboard-grid fade-in">
+  <!-- LEFT 8-COLUMN SECTION -->
+  <div class="dashboard-main-col">
+    <!-- TOP 3 KPI CARDS -->
+    <div class="kpi-cards-row">
+      <!-- Card 1: Highlighted Active Card (Gradient) -->
+      <div class="kpi-card kpi-hero">
+        <div class="kpi-top">
+          <span class="kpi-title">Total em Estoque</span>
+          <a class="kpi-arrow-btn hero-arrow" routerLink="/produtos" title="Ver Produtos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </a>
+        </div>
+        <div class="kpi-value">{{ totalEstoque() | number }} un</div>
+        <div class="kpi-footer">
+          <span class="kpi-badge-hero">{{ produtosComEstoqueBaixoCount() }} com baixo saldo</span>
+          <span class="kpi-subtext">em {{ totalProdutosCadastrados() }} produtos</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Total Faturado / Notas Fiscais -->
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-title">Notas Emitidas</span>
+          <a class="kpi-arrow-btn" routerLink="/faturamento" title="Ver Faturamento">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </a>
+        </div>
+        <div class="kpi-value">{{ totalNotasEmitidas() }} NFs</div>
+        <div class="kpi-footer">
+          <span class="kpi-badge-positive">↑ {{ notasFechadasCount() }} fechadas</span>
+          <span class="kpi-subtext">{{ notasAbertasCount() }} em aberto</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Produtos Cadastrados -->
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-title">Total de Produtos</span>
+          <button class="kpi-arrow-btn" (click)="abrirModalProduto()" title="Cadastrar Produto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </button>
+        </div>
+        <div class="kpi-value">{{ totalProdutosCadastrados() }} itens</div>
+        <div class="kpi-footer">
+          <span class="kpi-badge-positive">↑ {{ produtosComEstoquePositivoCount() }} ativos</span>
+          <span class="kpi-subtext">{{ produtosSemEstoqueCount() }} sem saldo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDDLE ROW: STATISTICS CHART & SAVINGS/PROGRESS -->
+    <div class="middle-cards-row">
+      <!-- Card 1: Statistics Bar Chart -->
+      <div class="content-card statistic-card">
+        <div class="card-header">
+          <h3 class="card-title">Estoque por Produto</h3>
+          <div class="card-header-actions">
+            <span class="tag-pill active-tag">Níveis Atuais</span>
+          </div>
+        </div>
+
+        <div class="statistic-content">
+          <div class="stat-sidebar">
+            <span class="stat-badge-red">{{ totalProdutosCadastrados() }} cadastrados</span>
+            <div class="stat-big-percentage">{{ totalEstoque() | number }} un</div>
+            <p class="stat-caption">Volume total de unidades em estoque ativo</p>
+          </div>
+
+          @if (produtosTopEstoque().length > 0) {
+          <div class="bar-chart-container">
+            @for (item of produtosTopEstoque(); track item.codigo) {
+            <div class="bar-col" [class.active-bar-col]="item.saldo === maiorSaldoProduto() && item.saldo > 0">
+              @if (item.saldo === maiorSaldoProduto() && item.saldo > 0) {
+              <div class="bar-tooltip">{{ item.saldo }} un</div>
+              <div class="bar-track active-track">
+                <div class="bar-fill-active" [style.height.%]="item.percentual"></div>
+              </div>
+              <span class="bar-label active-label" [title]="item.descricao">{{ item.codigo }}</span>
+              } @else {
+              <div class="bar-track">
+                <div class="bar-fill" [style.height.%]="item.percentual" [title]="item.saldo + ' un'"></div>
+              </div>
+              <span class="bar-label" [title]="item.descricao">{{ item.codigo }}</span>
+              }
+            </div>
+            }
+          </div>
+          } @else {
+          <div class="empty-state-chart">
+            <span>Nenhum produto cadastrado para exibir no gráfico.</span>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Card 2: Savings & Efficiency Goals -->
+      <div class="content-card savings-card">
+        <div class="card-header">
+          <h3 class="card-title">Eficiência Operacional</h3>
+          <a class="kpi-arrow-btn small-arrow" routerLink="/produtos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="savings-value">{{ taxaGeralOperacional() }}%</div>
+        <div class="savings-trend">{{ taxaDisponibilidade() }}% de disponibilidade imediata</div>
+
+        <div class="progress-list">
+          <div class="progress-item">
+            <div class="progress-info">
+              <span class="progress-name">Disponibilidade de Catálogo</span>
+              <span class="progress-val">{{ produtosComEstoquePositivoCount() }} / {{ totalProdutosCadastrados()
+                }}</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill fill-cyan" [style.width.%]="taxaDisponibilidade()"></div>
+            </div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-info">
+              <span class="progress-name">Atendimento de Notas Fiscais</span>
+              <span class="progress-val">{{ notasFechadasCount() }} / {{ totalNotasEmitidas() }} ({{ taxaAtendimento()
+                }}%)</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill fill-magenta striped" [style.width.%]="taxaAtendimento()">
+                <span class="progress-pin">{{ taxaAtendimento() }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-info">
+              <span class="progress-name">Estoque Regular (≥ 10 un)</span>
+              <span class="progress-val">{{ produtosEstoqueNormalCount() }} / {{ totalProdutosCadastrados() }}</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill fill-petroleum" [style.width.%]="taxaEstoqueNormal()"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM SECTION: TOP PRODUCTS -->
+    <div class="content-card top-products-card">
+      <div class="card-header">
+        <div class="title-with-badge">
+          <h3 class="card-title">Produtos em Destaque</h3>
+          <span class="badge-count">{{ produtos().length }} itens</span>
+        </div>
+        <div class="card-header-actions">
+          <button class="btn-action-sm" (click)="abrirModalProduto()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Adicionar Produto
+          </button>
+        </div>
+      </div>
+
+      <div class="products-grid">
+        @for (prod of produtosDestaque(); track prod.codigo) {
+        <div class="product-item-card">
+          <div class="product-img-wrapper">
+            <img [src]="getImagemProduto(prod.imagemUrl)" [alt]="prod.descricao" class="product-img" />
+            <span class="product-stock-tag" [class.low-stock]="prod.saldo < 10">
+              {{ prod.saldo }} em estoque
+            </span>
+          </div>
+
+          <div class="product-info-block">
+            <div class="product-code-row">
+              <span class="product-code">{{ prod.codigo }}</span>
+            </div>
+            <h4 class="product-title" [title]="prod.descricao">{{ prod.descricao }}</h4>
+
+            <div class="product-footer-row">
+              <div class="product-saldo-chip">
+                <span class="saldo-label">Saldo</span>
+                <strong class="saldo-value">{{ prod.saldo }} un</strong>
+              </div>
+
+              <div class="product-card-actions">
+                <button class="btn-mini-stock btn-estornar" (click)="abrirModalSaldo(prod, 'estornar')"
+                  title="Adicionar / Estornar Saldo">
+                  +
+                </button>
+                <button class="btn-mini-stock btn-baixar" (click)="abrirModalSaldo(prod, 'baixar')"
+                  title="Baixar Saldo">
+                  -
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        } @empty {
+        <div class="empty-state">
+          <p>Nenhum produto cadastrado ainda.</p>
+          <button class="btn-novo-hero" (click)="abrirModalProduto()">Cadastrar Primeiro Produto</button>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT 4-COLUMN SIDEBAR SECTION -->
+  <div class="dashboard-side-col">
+    <!-- CARD 1: RADIAL GAUGE (Conclusão de Notas Fiscais) -->
+    <div class="content-card target-card">
+      <div class="card-header">
+        <h3 class="card-title">Conclusão de Notas</h3>
+        <a class="kpi-arrow-btn small-arrow" routerLink="/faturamento">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="gauge-container">
+        <svg class="gauge-svg" viewBox="0 0 240 140">
+          <path d="M 30 130 A 90 90 0 0 1 210 130" fill="none" stroke="#E9EEF4" stroke-width="20"
+            stroke-linecap="round" />
+          <path d="M 30 130 A 90 90 0 0 1 210 130" fill="none" stroke="url(#gaugeGradientComp)" stroke-width="20"
+            stroke-linecap="round" stroke-dasharray="283" [style.strokeDashoffset]="gaugeOffset()" />
+          <defs>
+            <linearGradient id="gaugeGradientComp" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FF0055" />
+              <stop offset="100%" stop-color="#16303B" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <div class="gauge-center-content">
+          <div class="gauge-percentage">{{ taxaAtendimento() }}%</div>
+          <div class="gauge-trend-chip">
+            <span>{{ notasFechadasCount() }} de {{ totalNotasEmitidas() }} NFs</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="target-message">
+        @if (totalNotasEmitidas() === 0) {
+        Nenhuma nota fiscal emitida até o momento.
+        } @else if (notasAbertasCount() === 0) {
+        Todas as notas fiscais emitidas foram concluídas com sucesso.
+        } @else {
+        {{ notasAbertasCount() }} nota(s) fiscal(is) pendente(s) de fechamento.
+        }
+      </p>
+
+      <div class="target-metrics-row">
+        <div class="target-metric-item">
+          <span class="tm-label">Total NFs</span>
+          <span class="tm-value highlight">{{ totalNotasEmitidas() }}</span>
+        </div>
+        <div class="target-metric-item">
+          <span class="tm-label">Fechadas</span>
+          <span class="tm-value positive">{{ notasFechadasCount() }}</span>
+        </div>
+        <div class="target-metric-item">
+          <span class="tm-label">Abertas</span>
+          <span class="tm-value" [class.highlight]="notasAbertasCount() > 0">{{ notasAbertasCount() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2: DONUT / CATEGORY BREAKDOWN -->
+    <div class="content-card breakdown-card">
+      <div class="card-header">
+        <h3 class="card-title">Distribuição Operacional</h3>
+        <a class="kpi-arrow-btn small-arrow" routerLink="/produtos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="donut-rings-row">
+        <div class="ring-col">
+          <div class="ring-circle color-magenta">
+            <svg viewBox="0 0 36 36">
+              <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="ring-fill magenta" [attr.stroke-dasharray]="taxaDisponibilidade() + ', 100'"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+          </div>
+          <span class="ring-label">Disponív.</span>
+        </div>
+
+        <div class="ring-col">
+          <div class="ring-circle color-cyan">
+            <svg viewBox="0 0 36 36">
+              <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="ring-fill cyan" [attr.stroke-dasharray]="taxaAtendimento() + ', 100'"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+          </div>
+          <span class="ring-label">Fechadas</span>
+        </div>
+
+        <div class="ring-col">
+          <div class="ring-circle color-emerald">
+            <svg viewBox="0 0 36 36">
+              <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="ring-fill emerald"
+                [attr.stroke-dasharray]="(totalNotasEmitidas() > 0 ? (100 - taxaAtendimento()) : 0) + ', 100'"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+          </div>
+          <span class="ring-label">Abertas</span>
+        </div>
+
+        <div class="ring-col">
+          <div class="ring-circle color-petroleum">
+            <svg viewBox="0 0 36 36">
+              <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="ring-fill petroleum" [attr.stroke-dasharray]="taxaEstoqueNormal() + ', 100'"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+          </div>
+          <span class="ring-label">Regular</span>
+        </div>
+      </div>
+
+      <div class="breakdown-list">
+        <div class="breakdown-item">
+          <div class="bi-left">
+            <span class="dot-indicator dot-magenta"></span>
+            <span class="bi-name">Saldo Total em Estoque</span>
+          </div>
+          <span class="bi-value">{{ totalEstoque() | number }} un</span>
+        </div>
+
+        <div class="breakdown-item">
+          <div class="bi-left">
+            <span class="dot-indicator dot-cyan"></span>
+            <span class="bi-name">Notas Fiscais Fechadas</span>
+          </div>
+          <span class="bi-value">{{ notasFechadasCount() }} NFs</span>
+        </div>
+
+        <div class="breakdown-item">
+          <div class="bi-left">
+            <span class="dot-indicator dot-emerald"></span>
+            <span class="bi-name">Notas Fiscais Abertas</span>
+          </div>
+          <span class="bi-value">{{ notasAbertasCount() }} NFs</span>
+        </div>
+
+        <div class="breakdown-item">
+          <div class="bi-left">
+            <span class="dot-indicator dot-petroleum"></span>
+            <span class="bi-name">Produtos Cadastrados</span>
+          </div>
+          <span class="bi-value">{{ totalProdutosCadastrados() }} itens</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: MICROSERVICES HEALTH & RESILIENCE -->
+    <div class="content-card resilience-card">
+      <div class="card-header">
+        <div class="resilience-title-box">
+          <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <h3 class="card-title">Resiliência & Saúde</h3>
+        </div>
+        <button class="kpi-arrow-btn small-arrow" (click)="healthService.verificarTodos()" title="Verificar Conexões">
+          <svg [class.spin]="healthService.isChecking()" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="ms-status-list">
+        <div class="ms-status-row">
+          <div class="ms-info">
+            <span class="ms-dot" [class.online]="healthService.estoqueHealth().online"
+              [class.offline]="!healthService.estoqueHealth().online"></span>
+            <div>
+              <div class="ms-name">Estoque API</div>
+              <div class="ms-port">Porta 5032 • /health</div>
+            </div>
+          </div>
+          <span class="ms-badge" [class.online]="healthService.estoqueHealth().online"
+            [class.offline]="!healthService.estoqueHealth().online">
+            {{ healthService.estoqueHealth().status }}
+          </span>
+        </div>
+
+        <div class="ms-status-row">
+          <div class="ms-info">
+            <span class="ms-dot" [class.online]="healthService.faturamentoHealth().online"
+              [class.offline]="!healthService.faturamentoHealth().online"></span>
+            <div>
+              <div class="ms-name">Faturamento API</div>
+              <div class="ms-port">Porta 5168 • /health</div>
+            </div>
+          </div>
+          <span class="ms-badge" [class.online]="healthService.faturamentoHealth().online"
+            [class.offline]="!healthService.faturamentoHealth().online">
+            {{ healthService.faturamentoHealth().status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="resilience-features-grid">
+        <div class="feature-tag" title="Polly com 3 tentativas e backoff exponencial">
+          <span class="tag-icon">⚡</span>
+          <span>Polly Retry (3x)</span>
+        </div>
+        <div class="feature-tag" title="Circuit Breaker abre após 2 falhas para fail-fast">
+          <span class="tag-icon">🔒</span>
+          <span>Circuit Breaker</span>
+        </div>
+        <div class="feature-tag" title="Timeout de 5s por requisição para evitar travamentos">
+          <span class="tag-icon">⏱️</span>
+          <span>Timeout (5s)</span>
+        </div>
+        <div class="feature-tag" title="Rollback e estorno automático em falha parcial de NF">
+          <span class="tag-icon">🔄</span>
+          <span>Saga Rollback</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EMBEDDED MODALS -->
+<app-modal-produto [isOpen]="isModalProdutoOpen()" (close)="fecharModalProduto()"
+  (save)="salvarProduto($event)"></app-modal-produto>
+
+<app-modal-saldo [isOpen]="isModalSaldoOpen()" [produto]="produtoSelecionadoSaldo" [tipo]="saldoAjusteTipo"
+  (close)="fecharModalSaldo()" (save)="salvarAjusteSaldo($event)"></app-modal-saldo>

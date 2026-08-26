@@ -1,0 +1,323 @@
+.view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.view-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-catalog {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  width: 220px;
+}
+
+.search-catalog .search-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+}
+
+.search-catalog input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.85rem;
+  width: 100%;
+  color: var(--text-main);
+}
+
+.view-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--brand-petroleum-900);
+}
+
+.view-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.btn-primary-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-magenta);
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-magenta);
+  transition: all 0.2s ease;
+}
+
+.btn-primary-action svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-primary-action:hover {
+  background: var(--accent-magenta-hover);
+  transform: translateY(-2px);
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.catalog-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.catalog-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand-petroleum-500);
+}
+
+.catalog-img-box {
+  height: 250px;
+  width: 100%;
+  background: #E2E8F0;
+  position: relative;
+}
+
+.catalog-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.catalog-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(22, 48, 59, 0.9);
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(4px);
+}
+
+.catalog-badge.badge-low {
+  background: var(--accent-magenta);
+}
+
+.catalog-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.catalog-code {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--brand-petroleum-600);
+  background: var(--brand-petroleum-50);
+  padding: 2px 8px;
+  border-radius: 4px;
+  width: fit-content;
+  margin-bottom: 6px;
+}
+
+.catalog-desc {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.image-url-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--bg-surface-secondary);
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.image-url-preview svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.image-url-preview span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.catalog-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.btn-stock-action {
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.btn-stock-action.btn-add {
+  background: var(--color-emerald-light);
+  color: var(--color-emerald);
+}
+
+.btn-stock-action.btn-add:hover {
+  background: var(--color-emerald);
+  color: #FFFFFF;
+}
+
+.btn-stock-action.btn-sub {
+  background: #FFE5EE;
+  color: var(--accent-magenta);
+}
+
+.btn-stock-action.btn-sub:hover {
+  background: var(--accent-magenta);
+  color: #FFFFFF;
+}
+
+.empty-state-large {
+  grid-column: 1 / -1;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 4rem 2rem;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.btn-secondary-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  padding: 9px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-action:hover:not(:disabled) {
+  background: #FFFFFF;
+  border-color: var(--border-focus);
+  color: var(--brand-petroleum-900);
+}
+
+.btn-secondary-action svg {
+  width: 15px;
+  height: 15px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.resilience-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border: 1px solid transparent;
+  animation: fadeIn 0.3s ease;
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.alert-danger .alert-icon-col svg {
+  color: #EF4444;
+}
+
+.alert-icon-col svg {
+  width: 26px;
+  height: 26px;
+}
+
+.alert-content-col {
+  flex: 1;
+}
+
+.alert-content-col h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.alert-content-col p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.btn-alert-action {
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  color: var(--brand-petroleum-900);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  transition: all 0.2s ease;
+}
+
+.btn-alert-action:hover {
+  background: var(--bg-surface-secondary);
+  border-color: var(--border-focus);
+}

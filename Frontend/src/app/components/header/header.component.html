@@ -1,0 +1,83 @@
+<header class="app-header">
+  <div class="header-container">
+    <!-- LEFT: Logo Nexus ERP Enterprise -->
+    <div class="header-left">
+      <a class="brand-logo" routerLink="/dashboard" title="Nexus ERP - Início">
+        <div class="logo-mark">
+          <span class="brand-text">NEXUS</span>
+          <span class="erp-badge">ERP</span>
+        </div>
+        <div class="tagline-badge">
+          <span class="tagline-text">ENTERPRISE</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- CENTER: Navegação Principal Centralizada -->
+    <nav class="header-center" aria-label="Navegação Principal">
+      <div class="nav-pills">
+        <a class="nav-pill" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="2" />
+            <rect x="14" y="3" width="7" height="7" rx="2" />
+            <rect x="14" y="14" width="7" height="7" rx="2" />
+            <rect x="3" y="14" width="7" height="7" rx="2" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-pill" routerLink="/produtos" routerLinkActive="active">
+          <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+            <path d="m3.3 7 8.7 5 8.7-5" />
+            <path d="M12 22V12" />
+          </svg>
+          <span>Produtos & Estoque</span>
+        </a>
+
+        <a class="nav-pill" routerLink="/faturamento" routerLinkActive="active">
+          <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+          <span>Faturamento (NF-e)</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- RIGHT: Status dos Serviços, Ação Rápida e Perfil -->
+    <div class="header-right">
+
+      <!-- Quick Action: Cadastrar Produto -->
+      <button class="btn-novo-header" (click)="onOpenNewProduct()" title="Cadastrar Produto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        <span>Novo Produto</span>
+      </button>
+
+      <!-- Notificações -->
+      <button class="icon-btn" title="Notificações">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+        <span class="notification-badge"></span>
+      </button>
+
+      <!-- Perfil do Usuário -->
+      <div class="user-chip" title="Perfil do Usuário">
+        <div class="avatar">V</div>
+        <div class="user-info">
+          <span class="user-greeting">Olá, 👋</span>
+          <span class="user-name">Vanessa</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

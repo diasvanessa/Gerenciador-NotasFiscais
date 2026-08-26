@@ -1,0 +1,138 @@
+:root {
+  --brand-petroleum-900: #0E1F26;
+  --brand-petroleum-800: #16303B;
+  --brand-petroleum-700: #1E3F4D;
+  --brand-petroleum-600: #295567;
+  --brand-petroleum-500: #387087;
+  --brand-petroleum-100: #E4EFF3;
+  --brand-petroleum-50: #F0F6F8;
+
+  --accent-magenta: #FF0055;
+  --accent-magenta-hover: #E6004C;
+  --accent-magenta-light: #FFF0F5;
+  --accent-magenta-glow: rgba(255, 0, 85, 0.25);
+
+  --color-cyan: #00B4D8;
+  --color-cyan-light: #E0F8FD;
+  --color-purple: #6366F1;
+  --color-purple-light: #EEF2FF;
+  --color-emerald: #10B981;
+  --color-emerald-light: #ECFDF5;
+  --color-amber: #F59E0B;
+  --color-amber-light: #FFFBEB;
+  --color-rose: #F43F5E;
+
+  --bg-app: #F2F5F8;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F8FAFC;
+  --bg-surface-hover: #F1F5F9;
+
+  --text-main: #132228;
+  --text-secondary: #526670;
+  --text-muted: #8499A5;
+  --text-inverted: #FFFFFF;
+
+  --border-light: #E5ECF0;
+  --border-subtle: #EEF3F6;
+  --border-focus: #16303B;
+
+  --shadow-sm: 0 1px 3px rgba(14, 31, 38, 0.04);
+  --shadow-md: 0 4px 16px -2px rgba(14, 31, 38, 0.06);
+  --shadow-lg: 0 12px 32px -4px rgba(14, 31, 38, 0.08);
+  --shadow-card: 0 2px 12px rgba(14, 31, 38, 0.04);
+  --shadow-magenta: 0 8px 24px -4px rgba(255, 0, 85, 0.3);
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-full: 9999px;
+
+  --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-secondary: 'Inter', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-primary);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}

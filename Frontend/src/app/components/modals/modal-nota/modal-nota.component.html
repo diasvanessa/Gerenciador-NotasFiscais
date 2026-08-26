@@ -1,0 +1,49 @@
+@if (isOpen()) {
+<div class="modal-backdrop fade-in" (click)="onClose()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">Emitir Nova Nota Fiscal</h3>
+      <button class="btn-close-modal" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="items-header-row">
+        <span class="form-label">Itens da Nota Fiscal</span>
+        <button class="btn-add-item-link" (click)="adicionarItem()">+ Adicionar Outro Item</button>
+      </div>
+
+      @for (item of itensNovaNota; track $index) {
+      <div class="item-form-row">
+        <!-- 1. Campo de Seleção do Produto (Topo) -->
+        <div class="form-group">
+          <label class="form-label">Produto</label>
+          <select class="form-input" [(ngModel)]="item.codigoProduto">
+            <option value="" disabled>Selecione um produto</option>
+            @for (p of produtos(); track p.codigo) {
+            <option [value]="p.codigo">{{ p.codigo }} - {{ p.descricao }} (Saldo: {{ p.saldo }})</option>
+            }
+          </select>
+        </div>
+
+        <!-- 2. Quantidade abaixo do Produto com botão de remover ao lado -->
+        <div class="item-bottom-row">
+          <div class="form-group flex-1">
+            <label class="form-label">Quantidade</label>
+            <input type="number" min="1" class="form-input" [(ngModel)]="item.quantidade" />
+          </div>
+
+          <button class="btn-remove-item" (click)="removerItem($index)" title="Remover Item">
+            ✕
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="onClose()">Cancelar</button>
+      <button class="btn-primary" (click)="onSave()">Emitir Nota Fiscal</button>
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,111 @@
+@if (isOpen()) {
+<div class="modal-backdrop fade-in" (click)="onClose()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <h3 class="modal-title">Cadastrar Novo Produto</h3>
+        <span class="ai-badge-header">✨ IA Vision Integrada</span>
+      </div>
+      <button class="btn-close-modal" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- UPLOAD DE ARQUIVO NO SERVIDOR COM IA -->
+      <div class="form-group">
+        <label class="form-label">
+          Foto do Produto (Identificação Automática por IA)
+        </label>
+        <div class="file-upload-wrapper">
+          <label class="btn-file-upload">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            <span>{{ arquivoSelecionado ? arquivoSelecionado.name : 'Selecionar Imagem do Computador...' }}</span>
+            <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp" (change)="onFileSelected($event)"
+              class="file-input-hidden" />
+          </label>
+
+          @if (arquivoSelecionado) {
+          <button class="btn-clear-file" (click)="removerArquivo()" title="Remover Arquivo">✕</button>
+          }
+        </div>
+
+        @if (isAnalyzingWithAi()) {
+        <div class="ai-status-analyzing">
+          <div class="ai-spinner"></div>
+          <span>Aguarde enquanto o produto é identificado...</span>
+        </div>
+        } @else if (sugestaoIa()) {
+        <div class="ai-status-success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+          <span>Identificado por IA: <strong>"{{ sugestaoIa() }}"</strong> (preenchido abaixo)</span>
+        </div>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label class="form-label">Código do Produto *</label>
+          <input type="text" class="form-input" placeholder="Ex: PRD-102" [(ngModel)]="novoProduto.codigo" />
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Quantidade *</label>
+          <input type="number" min="0" class="form-input" [(ngModel)]="novoProduto.saldoInicial" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="label-with-ai-chip">
+          <label class="form-label">Descrição do Produto *</label>
+          @if (sugestaoIa()) {
+          <span class="chip-preenchido-ia">✨ Preenchido por IA</span>
+          }
+        </div>
+        <input type="text" class="form-input" [class.input-ai-highlight]="!!sugestaoIa()"
+          placeholder="Ex: Teclado Mecânico RGB ou Camiseta Polo" [(ngModel)]="novoProduto.descricao" />
+        <span class="form-hint">Você pode revisar e alterar o nome sugerido pela IA a qualquer momento.</span>
+      </div>
+
+      <!-- OU INFORMAR URL DIRETAMENTE
+        <div class="form-group">
+          <label class="form-label">Ou Endereço da Imagem (URL Externa)</label>
+          <input
+            type="text"
+            class="form-input"
+            placeholder="Ex: http://localhost:5032/images/foto.jpg ou https://..."
+            [(ngModel)]="novoProduto.imagemUrl"
+            [disabled]="!!arquivoSelecionado"
+          />
+        </div> -->
+
+      <!-- LIVE PREVIEW DA IMAGEM -->
+      <div class="image-preview-card">
+        <div class="preview-header">
+          <span class="preview-label">Pré-visualização</span>
+          @if (arquivoSelecionado) {
+          <span class="preview-badge">Arquivo Local Selecionado</span>
+          }
+        </div>
+        <div class="preview-box">
+          <img [src]="getImagemExibicao()" alt="Preview do Produto" class="preview-img" />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="onClose()" [disabled]="isUploading()">Cancelar</button>
+      <button class="btn-primary" (click)="onSave()" [disabled]="isUploading()">
+        @if (isUploading()) {
+        <span>Salvando Imagem no Servidor...</span>
+        } @else {
+        <span>Cadastrar Produto</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}

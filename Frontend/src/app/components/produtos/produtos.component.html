@@ -1,0 +1,102 @@
+<div class="catalog-view fade-in">
+  <div class="view-header">
+    <div class="view-title-group">
+      <h2 class="view-title">Catálogo de Produtos & Controle de Estoque</h2>
+      <p class="view-subtitle">Gerencie os produtos cadastrados, fotos e movimentações de saldo no servidor.</p>
+    </div>
+    <div class="view-actions">
+      <div class="search-catalog">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Filtrar catálogo..." [(ngModel)]="searchTerm" />
+      </div>
+
+      <button class="btn-secondary-action" (click)="carregarProdutos()" [disabled]="isLoading()" title="Recarregar Catálogo">
+        <svg [class.spin]="isLoading()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        <span>Atualizar</span>
+      </button>
+
+      <button class="btn-primary-action" (click)="abrirModalProduto()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Novo Produto
+      </button>
+    </div>
+  </div>
+
+  <!-- Resilience Warning Banner: Estoque Offline -->
+  @if (erroConexaoEstoque() || !healthService.estoqueHealth().online) {
+  <div class="resilience-alert-banner alert-danger">
+    <div class="alert-icon-col">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+    </div>
+    <div class="alert-content-col">
+      <h4>Microsserviço de Estoque Offline (Porta 5032)</h4>
+      <p>Não foi possível conectar ao servidor de Estoque. O catálogo e as alterações de saldo estão temporariamente indisponíveis.</p>
+    </div>
+    <button class="btn-alert-action" (click)="carregarProdutos()">
+      Tentar Reconectar
+    </button>
+  </div>
+  }
+
+  <!-- Products Grid -->
+  <div class="catalog-grid">
+    @for (prod of produtosFiltrados(); track prod.codigo) {
+    <div class="catalog-card">
+      <div class="catalog-img-box">
+        <img [src]="getImagemProduto(prod.imagemUrl)" [alt]="prod.descricao" class="catalog-img" />
+        <div class="catalog-badge" [class.badge-low]="prod.saldo < 10">
+          Saldo: {{ prod.saldo }} un
+        </div>
+      </div>
+
+      <div class="catalog-body">
+        <div class="catalog-code">{{ prod.codigo }}</div>
+        <h3 class="catalog-desc">{{ prod.descricao }}</h3>
+
+        <!-- @if (prod.imagemUrl) {
+        <div class="image-url-preview" [title]="prod.imagemUrl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+          <span>{{ prod.imagemUrl }}</span>
+        </div>
+        } -->
+
+        <div class="catalog-actions-row">
+          <button class="btn-stock-action btn-add" (click)="abrirModalSaldo(prod, 'estornar')">
+            + Aumentar Estoque
+          </button>
+          <button class="btn-stock-action btn-sub" (click)="abrirModalSaldo(prod, 'baixar')">
+            - Reduzir Estoque
+          </button>
+        </div>
+      </div>
+    </div>
+    } @empty {
+    <div class="empty-state-large">
+      <p>Nenhum produto encontrado.</p>
+      <button class="btn-primary-action" (click)="abrirModalProduto()">Cadastrar Novo Produto</button>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- EMBEDDED MODALS -->
+<app-modal-produto [isOpen]="isModalProdutoOpen()" (close)="fecharModalProduto()"
+  (save)="salvarProduto($event)"></app-modal-produto>
+
+<app-modal-saldo [isOpen]="isModalSaldoOpen()" [produto]="produtoSelecionadoSaldo" [tipo]="saldoAjusteTipo"
+  (close)="fecharModalSaldo()" (save)="salvarAjusteSaldo($event)"></app-modal-saldo>
